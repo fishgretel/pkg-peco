@@ -4,11 +4,16 @@ function init --on-event init_peco
     echo "⚫  Please install 'peco' first: brew install peco"
   else
     function peco_select_history
-      history|peco|read slct
+      set -l query (commandline)
+      if test -n $query
+        set peco_query --query "$query"
+      end
+
+      history|peco $peco_query|read slct
       if [ $slct ]
         commandline $slct
       else
-        commandline ''
+        commandline $query
       end
     end
 
